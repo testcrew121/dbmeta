@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../src/autoload.php';
 
-$meta = new \Molengo\DbMeta();
+$meta = new \Molengo\Db\DbMeta();
 $meta->connect(__DIR__ . '/meta.db');
 
 $meta->set('key', 'value' . date('U'));
