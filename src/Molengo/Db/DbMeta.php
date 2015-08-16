@@ -1,6 +1,6 @@
 <?php
 
-namespace Molengo;
+namespace Molengo\Db;
 
 /**
  * Simple and easy key/value storage with SQLite3
