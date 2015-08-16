@@ -1,5 +1,7 @@
+.idea/
+composer.lock
 nbproject/
 vendor/
-composer.lock
+build/
 tests/coverage/
 tests/meta.db
