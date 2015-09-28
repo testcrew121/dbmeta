@@ -10,7 +10,7 @@ Simple and easy key/value storage with SQLite3
 ## Examples
 
 ```php
-$meta = new \Molengo\Db\DbMeta();
+$meta = new \Odan\Database\Meta\DbMeta();
 
 // Open db file
 $meta->connect(__DIR__ . '/meta.db');

@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../src/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
-$meta = new \Molengo\Db\DbMeta();
+$meta = new \Odan\Database\Meta\DbMeta();
 $meta->connect(__DIR__ . '/meta.db');
 
 $meta->set('key', 'value' . date('U'));

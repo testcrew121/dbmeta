@@ -1,6 +1,8 @@
 <?php
 
-namespace Molengo\Db;
+namespace Odan\Database\Meta;
+
+use SQLite3;
 
 /**
  * Simple and easy key/value storage with SQLite3
@@ -11,17 +13,30 @@ namespace Molengo\Db;
  */
 class DbMeta
 {
-    /* @var $file string */
 
+    /**
+     * Filename
+     *
+     * @var string
+     */
     protected $file;
 
-    /* @var $db SQLite3 */
+    /**
+     * Database
+     *
+     * @var SQLite3
+     */
     protected $db;
 
+    /**
+     * Connect to database
+     *
+     * @param string $file
+     */
     public function connect($file)
     {
         $this->file = $file;
-        $this->db = new \SQLite3($this->file);
+        $this->db = new SQLite3($this->file);
         $this->install();
     }
 
@@ -32,10 +47,9 @@ class DbMeta
      */
     protected function install()
     {
-        $result = $this->db->exec("CREATE TABLE IF NOT EXISTS meta(
+        return $this->db->exec("CREATE TABLE IF NOT EXISTS meta(
             meta_key TEXT PRIMARY KEY,
             meta_value BLOB)");
-        return $result;
     }
 
     /**
@@ -153,5 +167,4 @@ class DbMeta
             }
         }
     }
-
 }
