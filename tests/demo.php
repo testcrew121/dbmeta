@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$meta = new \Odan\Database\Meta\DbMeta();
+$meta = new \Odan\DbMeta\DbMetaSqlite();
 $meta->connect(__DIR__ . '/meta.db');
 
 $meta->set('key', 'value' . date('U'));

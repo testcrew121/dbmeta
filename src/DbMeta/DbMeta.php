@@ -1,6 +1,6 @@
 <?php
 
-namespace Odan\Database\Meta;
+namespace Odan\DbMeta;
 
 use SQLite3;
 
@@ -11,7 +11,7 @@ use SQLite3;
  * @license MIT
  * @link https://github.com/odan/dbmeta
  */
-class DbMeta
+class DbMetaSqlite
 {
 
     /**
@@ -167,4 +167,5 @@ class DbMeta
             }
         }
     }
+
 }
