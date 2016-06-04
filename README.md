@@ -1,11 +1,11 @@
-# dbmeta
-Simple and easy key/value storage with SQLite3
+# DdMeta
+Simple and easy key/value interface for SQLite3.
 
 ## Requirements
 
 * SQLite3 extension (php_sqlite3)
 * PHP >= 5.4
-* Write permission for database file
+* Write permission for database files
 
 ## Examples
 
@@ -32,9 +32,9 @@ $value2 = $meta->get(array('table', '1'));
 $value3 = $meta->get(array('table', '2'));
 
 // Check if key exist
-$exist = $meta->exist('key'); # returns true
-$exist2 = $meta->exist('temp'); # returns false
+$exist = $meta->has('key'); # returns true
+$exist2 = $meta->has('temp'); # returns false
 
 // Delete key
-$meta->delete('key');
+$meta->remove('key');
 ```
