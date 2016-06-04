@@ -1,23 +1,16 @@
 {
     "name": "odan/dbmeta",
     "type": "library",
-    "description": "Simple and easy key/value storage with SQLite3",
+    "description": "Simple key/value interface for SQLite3",
     "keywords": ["key value", "sqlite", "key/value"],
     "homepage": "https://github.com/odan/dbmeta",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "odan",
-            "email": "odan@molengo.com",
-            "homepage": "https://github.com/odan"
-        }
-    ],
     "require": {
         "php": ">=5.4"
     },
     "autoload": {
         "psr-4": {
-            "Odan\\DbMeta\\": "src/DbMeta"
+            "Odan\\": "src"
         }
     }
 }

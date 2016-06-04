@@ -2,16 +2,17 @@
 
 namespace Odan\DbMeta;
 
+use Odan\Cache\SimpleCacheInterface;
 use SQLite3;
 
 /**
- * Simple and easy key/value storage with SQLite3
+ * Simple key/value interface for SQLite3
  *
  * @author odan
  * @license MIT
  * @link https://github.com/odan/dbmeta
  */
-class DbMetaSqlite
+class DbMetaSqlite implements SimpleCacheInterface
 {
 
     /**
@@ -33,7 +34,7 @@ class DbMetaSqlite
      *
      * @param string $file
      */
-    public function connect($file)
+    public function open($file)
     {
         $this->file = $file;
         $this->db = new SQLite3($this->file);
@@ -53,14 +54,13 @@ class DbMetaSqlite
     }
 
     /**
-     * Set key and value
-     *
-     * @param mixed $key
-     * @param mixed $value
-     * @return bool
+     * {@inheritdoc}
      */
-    public function set($key, $value)
+    public function set($key, $value, $ttl = null)
     {
+        if ($key === null) {
+            throw new Exception('ArgumentNullException');
+        }
         $key = $this->encodeJson($key);
         $value = $this->encodeJson($value);
         /* @var $st SQLite3Stmt */
@@ -72,18 +72,18 @@ class DbMetaSqlite
     }
 
     /**
-     * Returns value by key
-     *
-     * @param mixed $key
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function get($key)
+    public function get($key, $default = null)
     {
+        if ($key === null) {
+            throw new Exception('ArgumentNullException');
+        }
         $key = $this->encodeJson($key);
         $st = $this->db->prepare('SELECT meta_value FROM meta WHERE meta_key=?;');
         $st->bindParam(1, $key, SQLITE3_TEXT);
         $row = $st->execute()->fetchArray();
-        $result = null;
+        $result = $default;
         if (isset($row['meta_value'])) {
             $result = $this->decodeJson($row['meta_value']);
         }
@@ -91,12 +91,9 @@ class DbMetaSqlite
     }
 
     /**
-     * Returns true if key exist
-     *
-     * @param mixed $key
-     * @return bool
+     * {@inheritdoc}
      */
-    public function exist($key)
+    public function has($key)
     {
         $key = $this->encodeJson($key);
         $st = $this->db->prepare('SELECT 1 FROM meta WHERE meta_key=?;');
@@ -107,12 +104,9 @@ class DbMetaSqlite
     }
 
     /**
-     * Delete key
-     *
-     * @param mixed $key
-     * @return bool
+     * {@inheritdoc}
      */
-    public function delete($key)
+    public function remove($key)
     {
         $key = $this->encodeJson($key);
         $st = $this->db->prepare('DELETE FROM meta WHERE meta_key=?;');
@@ -168,4 +162,12 @@ class DbMetaSqlite
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function clear()
+    {
+        $this->cache = array();
+        return true;
+    }
 }
