@@ -1,7 +1,7 @@
 {
     "name": "odan/dbmeta",
     "type": "library",
-    "description": "Simple key/value interface for SQLite3",
+    "description": "Simple key value interface for SQLite3",
     "keywords": ["key value", "sqlite", "key/value"],
     "homepage": "https://github.com/odan/dbmeta",
     "license": "MIT",
