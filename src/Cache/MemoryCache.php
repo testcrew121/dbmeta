@@ -25,8 +25,7 @@ class MemoryCache implements SimpleCacheInterface
         if ($key === null) {
             throw new Exception('Argument Null Exception');
         }
-        // TODO: Implement TTL parameter
-        $this->cache[$key] = $value;
+        $this->cache[$key] = $this->createCacheValue($key, $value, $ttl);
         return true;
     }
 
@@ -36,11 +35,17 @@ class MemoryCache implements SimpleCacheInterface
     public function get($key, $default = null)
     {
         if ($key === null) {
-            // TODO: Implement a real ArgumentNullException class
             throw new Exception('Argument Null Exception');
         }
-        // TODO: Implement TTL parameter
-        return $this->has($key) ? $this->cache[$key] : $default;
+        if (!array_key_exists($key, $this->cache)) {
+            return $default;
+        }
+        $cacheValue = $this->cache[$key];
+        if ($this->isExpired($cacheValue['expires'])) {
+            $this->remove($key);
+            return $default;
+        }
+        return isset($cacheValue['value']) ? $cacheValue['value'] : $default;
     }
 
     /**
@@ -48,7 +53,18 @@ class MemoryCache implements SimpleCacheInterface
      */
     public function has($key)
     {
-        return array_key_exists($key, $this->cache);
+        if ($key === null) {
+            throw new Exception('Argument Null Exception');
+        }
+        if (!array_key_exists($key, $this->cache)) {
+            return false;
+        }
+        $cacheValue = $this->cache[$key];
+        if ($this->isExpired($cacheValue['expires'])) {
+            $this->remove($key);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -67,6 +83,41 @@ class MemoryCache implements SimpleCacheInterface
     {
         $this->cache = array();
         return true;
+    }
+
+    /**
+     * Creates a FileSystemCacheValue object.
+     *
+     * @param mixed $key The cache key the file is stored under.
+     * @param mixed $value The data being stored
+     * @param int $ttl The timestamp of when the data will expire.  If null, the data won't expire.
+     * @return array Cache value
+     */
+    protected function createCacheValue($key, $value, $ttl = null)
+    {
+        $created = time();
+        return array(
+            'created' => $created,
+            'key' => $key,
+            'value' => $value,
+            'ttl' => $ttl,
+            'expires' => ($ttl) ? $created + $ttl : null
+        );
+    }
+
+    /**
+     * Checks if a value is expired
+     * @return bool True if the value is expired.  False if it is not.
+     */
+    protected function isExpired($expires)
+    {
+        //value doesn't expire
+        if (!$expires) {
+            return false;
+        }
+
+        //if it is after the expire time
+        return time() > $expires;
     }
 
 }
