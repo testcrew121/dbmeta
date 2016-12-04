@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DbMetaSqliteTest
+ * SqliteCache Test
  */
 class DbMetaSqliteTest extends PHPUnit_Framework_TestCase
 {

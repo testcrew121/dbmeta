@@ -10,7 +10,7 @@ $path = dirname($file);
 if (!file_exists($path)) {
     mkdir($path, 0777);
 }
-$meta = new \Odan\DbMeta\DbMetaSqlite($file);
+$meta = new \Odan\Cache\SqliteCache($file);
 
 $meta->clear();
 
