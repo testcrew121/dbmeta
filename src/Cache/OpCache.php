@@ -56,7 +56,7 @@ class OpCache implements SimpleCacheInterface
             mkdir($path, 0777);
         }
 
-        $cacheValue = $this->getCacheValue($key, $value, $ttl);
+        $cacheValue = $this->createCacheValue($key, $value, $ttl);
         $content = var_export($cacheValue, true);
 
         // HHVM fails at __set_state, so just use object cast for now
@@ -94,8 +94,19 @@ class OpCache implements SimpleCacheInterface
      */
     public function has($key)
     {
+        if ($key === null) {
+            throw new Exception('Argument Null Exception');
+        }
         $filename = $this->getFilename($key);
-        return file_exists($filename);
+        if (!file_exists($filename)) {
+            return false;
+        }
+        $cacheValue = include $filename;
+        if ($this->isExpired($cacheValue['expires'])) {
+            $this->remove($key);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -137,11 +148,12 @@ class OpCache implements SimpleCacheInterface
     /**
      * Creates a FileSystemCacheValue object.
      *
-     * @param FileSystemCacheKey $key The cache key the file is stored under.
+     * @param mixed $key The cache key the file is stored under.
      * @param mixed $value The data being stored
      * @param int $ttl The timestamp of when the data will expire.  If null, the data won't expire.
+     * @return array Cache value
      */
-    protected function getCacheValue($key, $value, $ttl = null)
+    protected function createCacheValue($key, $value, $ttl = null)
     {
         $created = time();
         return array(
