@@ -11,6 +11,9 @@ class OpCacheTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $path = dirname(__DIR__) . '/tmp/opcache';
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
         $this->cache = new \Odan\Cache\OpCache($path);
     }
 

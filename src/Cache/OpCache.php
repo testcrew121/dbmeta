@@ -37,7 +37,7 @@ class OpCache implements SimpleCacheInterface
             $this->path = sys_get_temp_dir() . '/opcache';
         }
         if (!file_exists($this->path)) {
-            mkdir($this->path, 0777);
+            mkdir($this->path, 0777, true);
         }
     }
 
@@ -53,7 +53,7 @@ class OpCache implements SimpleCacheInterface
         $cacheFile = $this->getFilename($key);
         $path = dirname($cacheFile);
         if (!is_dir($path)) {
-            mkdir($path, 0777);
+            mkdir($path, 0777, true);
         }
 
         $cacheValue = $this->createCacheValue($key, $value, $ttl);

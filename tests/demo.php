@@ -8,7 +8,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $file = dirname(__DIR__) . '/tmp/test.db';
 $path = dirname($file);
 if (!file_exists($path)) {
-    mkdir($path, 0777);
+    mkdir($path, 0777, true);
 }
 $meta = new \Odan\Cache\SqliteCache($file);
 

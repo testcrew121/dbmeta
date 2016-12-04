@@ -13,7 +13,7 @@ class DbMetaSqliteTest extends PHPUnit_Framework_TestCase
         $file = dirname(__DIR__) . '/tmp/test.db';
         $path = dirname($file);
         if (!file_exists($path)) {
-            mkdir($path, 0777);
+            mkdir($path, 0777, true);
         }
 
         $this->meta = new \Odan\Cache\SqliteCache($file);
