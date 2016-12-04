@@ -1,11 +1,12 @@
 # DdMeta
-Simple and easy key/value interface for SQLite3.
+Simple and easy key/value interface for SQLite3, OpCache and Memory.
 
 ## Requirements
-
-* SQLite3 extension (php_sqlite3)
 * PHP >= 5.6
-* Write permission for database files
+
+## Optional requirements
+* SQLite3 extension (php_sqlite3)
+* Write permission for cache and database files
 
 ## Examples
 
