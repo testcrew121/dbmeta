@@ -10,10 +10,7 @@ Simple and easy key/value interface for SQLite3.
 ## Examples
 
 ```php
-$meta = new \Odan\DbMeta\DbMetaSqlite();
-
-// Open db file
-$meta->open(__DIR__ . '/meta.db');
+$meta = new \Odan\DbMeta\DbMetaSqlite(__DIR__ . '/meta.db');
 
 // Set value
 $meta->set('key', 'value' . date('U'));
