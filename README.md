@@ -38,6 +38,7 @@ $meta->remove('key');
 
 ## Performance comparison
 
+```
 Class: Odan\Cache\MemoryCache
 Seconds: 0.01800012588501
 
@@ -46,7 +47,5 @@ Seconds: 7.2159998416901
 
 Class: Odan\Cache\SqliteCache
 Seconds: 52.093000173569
-
+```
 (lower is better)
-
-
