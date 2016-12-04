@@ -73,12 +73,13 @@ class SqliteCache implements SimpleCacheInterface
         if ($key === null) {
             throw new Exception('ArgumentNullException');
         }
-        $key = $this->encodeJson($key);
-        $value = $this->encodeJson($value);
+        $cacheKey = $this->encodeJson($key);
+        $cacheValue = $this->createCacheValue($cacheKey, $value, $ttl);
+        $jsonValue = $this->encodeJson($cacheValue);
         /* @var $st SQLite3Stmt */
         $st = $this->db->prepare('INSERT OR REPLACE INTO meta VALUES(?,?)');
-        $st->bindParam(1, $key, SQLITE3_TEXT);
-        $st->bindParam(2, $value, SQLITE3_TEXT);
+        $st->bindParam(1, $cacheKey, SQLITE3_TEXT);
+        $st->bindParam(2, $jsonValue, SQLITE3_TEXT);
         $result = $st->execute() !== false;
         return $result;
     }
@@ -91,15 +92,19 @@ class SqliteCache implements SimpleCacheInterface
         if ($key === null) {
             throw new Exception('ArgumentNullException');
         }
-        $key = $this->encodeJson($key);
+        $cacheKey = $this->encodeJson($key);
         $st = $this->db->prepare('SELECT meta_value FROM meta WHERE meta_key=?;');
-        $st->bindParam(1, $key, SQLITE3_TEXT);
+        $st->bindParam(1, $cacheKey, SQLITE3_TEXT);
         $row = $st->execute()->fetchArray();
-        $result = $default;
-        if (isset($row['meta_value'])) {
-            $result = $this->decodeJson($row['meta_value']);
+        if (!isset($row['meta_value'])) {
+            return $default;
         }
-        return $result;
+        $cacheValue = $this->decodeJson($row['meta_value']);
+        if ($this->isExpired($cacheValue['expires'])) {
+            $this->remove($key);
+            return $default;
+        }
+        return isset($cacheValue['value']) ? $cacheValue['value'] : $default;
     }
 
     /**
@@ -107,12 +112,22 @@ class SqliteCache implements SimpleCacheInterface
      */
     public function has($key)
     {
-        $key = $this->encodeJson($key);
-        $st = $this->db->prepare('SELECT 1 FROM meta WHERE meta_key=?;');
-        $st->bindParam(1, $key, SQLITE3_TEXT);
-        $row = $st->execute()->fetchArray();
-        $result = !empty($row);
-        return $result;
+        if ($key === null) {
+            throw new Exception('Argument Null Exception');
+        }
+        $cacheKey = $this->encodeJson($key);
+        $st = $this->db->prepare('SELECT 1,meta_value FROM meta WHERE meta_key=?;');
+        $st->bindParam(1, $cacheKey, SQLITE3_TEXT);
+        $row = $st->execute()->fetchArray(SQLITE3_ASSOC);
+        if (empty($row)) {
+            return false;
+        }
+        $cacheValue = $this->decodeJson($row['meta_value']);
+        if ($this->isExpired($cacheValue['expires'])) {
+            $this->remove($key);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -120,9 +135,12 @@ class SqliteCache implements SimpleCacheInterface
      */
     public function remove($key)
     {
-        $key = $this->encodeJson($key);
+        if ($key === null) {
+            throw new Exception('Argument Null Exception');
+        }
+        $cacheKey = $this->encodeJson($key);
         $st = $this->db->prepare('DELETE FROM meta WHERE meta_key=?;');
-        $st->bindParam(1, $key, SQLITE3_TEXT);
+        $st->bindParam(1, $cacheKey, SQLITE3_TEXT);
         $result = $st->execute() !== false;
         return $result;
     }
@@ -179,8 +197,44 @@ class SqliteCache implements SimpleCacheInterface
      */
     public function clear()
     {
-        $this->cache = array();
+        $this->db->exec("DROP TABLE meta;");
+        $this->install();
         return true;
+    }
+
+    /**
+     * Creates a FileSystemCacheValue object.
+     *
+     * @param mixed $key The cache key the file is stored under.
+     * @param mixed $value The data being stored
+     * @param int $ttl The timestamp of when the data will expire.  If null, the data won't expire.
+     * @return array Cache value
+     */
+    protected function createCacheValue($key, $value, $ttl = null)
+    {
+        $created = time();
+        return array(
+            'created' => $created,
+            'key' => $key,
+            'value' => $value,
+            'ttl' => $ttl,
+            'expires' => ($ttl) ? $created + $ttl : null
+        );
+    }
+
+    /**
+     * Checks if a value is expired
+     * @return bool True if the value is expired.  False if it is not.
+     */
+    protected function isExpired($expires)
+    {
+        //value doesn't expire
+        if (!$expires) {
+            return false;
+        }
+
+        //if it is after the expire time
+        return time() > $expires;
     }
 
 }
