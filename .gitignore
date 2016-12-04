@@ -5,3 +5,4 @@ vendor/
 build/
 tests/coverage/
 tests/meta.db
+tmp/
