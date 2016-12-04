@@ -92,7 +92,7 @@ class SqliteCache implements SimpleCacheInterface
         if (!isset($row['meta_value'])) {
             return $default;
         }
-        $cacheValue = $this->decodeJson($row['meta_value']);
+        $cacheValue = $this->decodeValue($row['meta_value']);
         if ($this->isExpired($cacheValue['expires'])) {
             $this->remove($key);
             return $default;
@@ -112,7 +112,7 @@ class SqliteCache implements SimpleCacheInterface
         if (empty($row)) {
             return false;
         }
-        $cacheValue = $this->decodeJson($row['meta_value']);
+        $cacheValue = $this->decodeValue($row['meta_value']);
         if ($this->isExpired($cacheValue['expires'])) {
             $this->remove($key);
             return false;
@@ -138,7 +138,7 @@ class SqliteCache implements SimpleCacheInterface
      * @param mixed $value
      * @return string
      */
-    protected function encodeJson($value)
+    protected function encodeValue($value)
     {
         return serialize($value);
     }
@@ -146,12 +146,12 @@ class SqliteCache implements SimpleCacheInterface
     /**
      * Returns array from json string
      *
-     * @param string $json
-     * @return array
+     * @param string $value
+     * @return mixed
      */
-    protected function decodeJson($json)
+    protected function decodeValue($value)
     {
-        return unserialize($json);
+        return unserialize($value);
     }
 
     /**
@@ -176,7 +176,7 @@ class SqliteCache implements SimpleCacheInterface
         if ($key === null) {
             throw new Exception('Argument Null Exception');
         }
-        return $this->encodeJson($key);
+        return $this->encodeValue($key);
     }
 
     /**
@@ -197,7 +197,7 @@ class SqliteCache implements SimpleCacheInterface
             'ttl' => $ttl,
             'expires' => ($ttl) ? $created + $ttl : null
         );
-        return $this->encodeJson($data);
+        return $this->encodeValue($data);
     }
 
     /**
