@@ -4,13 +4,13 @@ Simple and easy key/value interface for SQLite3.
 ## Requirements
 
 * SQLite3 extension (php_sqlite3)
-* PHP >= 5.4
+* PHP >= 5.6
 * Write permission for database files
 
 ## Examples
 
 ```php
-$meta = new \Odan\DbMeta\DbMetaSqlite(__DIR__ . '/meta.db');
+$meta = new \Odan\Cache\SqliteCache(__DIR__ . '/meta.db');
 
 // Set value
 $meta->set('key', 'value' . date('U'));
