@@ -2,14 +2,24 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$meta = new \Odan\DbMeta\DbMetaSqlite();
-$meta->open(__DIR__ . '/meta.db');
+//$path = dirname(__DIR__) . '/tmp/opcache';
+//$meta = new \Odan\Cache\OpCache($path);
+
+$file = dirname(__DIR__) . '/tmp/test.db';
+$path = dirname($file);
+if (!file_exists($path)) {
+    mkdir($path, 0777);
+}
+$meta = new \Odan\DbMeta\DbMetaSqlite($file);
 
 $meta->clear();
 
 $meta->set('key', 'value' . date('U'));
 $meta->set(array('table', '1'), 'value2');
 $meta->set(array('table', '2'), array('name' => 'odan', 'phone' => 1234567));
+$meta->set('keyttl', 'value with ttl', 1);
+//sleep(2);
+$meta->get('keyttl');
 
 echo '<pre>';
 var_dump($meta->get('key'));

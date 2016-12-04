@@ -10,14 +10,19 @@ class DbMetaSqliteTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->meta = new \Odan\DbMeta\DbMetaSqlite();
-        $this->meta->open(__DIR__ . '/meta.db');
+        $file = dirname(__DIR__) . '/tmp/test.db';
+        $path = dirname($file);
+        if (!file_exists($path)) {
+            mkdir($path, 0777);
+        }
+
+        $this->meta = new \Odan\Cache\SqliteCache($file);
         $this->meta->clear();
     }
 
     public function testInstanceOf()
     {
-        $this->assertInstanceOf(\Odan\DbMeta\DbMetaSqlite::class, $this->meta);
+        $this->assertInstanceOf(\Odan\Cache\SqliteCache::class, $this->meta);
     }
 
     public function testHasStringKey()

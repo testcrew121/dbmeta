@@ -23,8 +23,7 @@ class MemoryCache implements SimpleCacheInterface
     public function set($key, $value, $ttl = null)
     {
         if ($key === null) {
-            // TODO: Implement a real ArgumentNullException class
-            throw new Exception('ArgumentNullException');
+            throw new Exception('Argument Null Exception');
         }
         // TODO: Implement TTL parameter
         $this->cache[$key] = $value;
@@ -38,7 +37,7 @@ class MemoryCache implements SimpleCacheInterface
     {
         if ($key === null) {
             // TODO: Implement a real ArgumentNullException class
-            throw new Exception('ArgumentNullException');
+            throw new Exception('Argument Null Exception');
         }
         // TODO: Implement TTL parameter
         return $this->has($key) ? $this->cache[$key] : $default;
@@ -69,4 +68,5 @@ class MemoryCache implements SimpleCacheInterface
         $this->cache = array();
         return true;
     }
+
 }

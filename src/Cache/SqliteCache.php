@@ -1,8 +1,7 @@
 <?php
 
-namespace Odan\DbMeta;
+namespace Odan\Cache;
 
-use Odan\Cache\SimpleCacheInterface;
 use SQLite3;
 
 /**
@@ -12,7 +11,7 @@ use SQLite3;
  * @license MIT
  * @link https://github.com/odan/dbmeta
  */
-class DbMetaSqlite implements SimpleCacheInterface
+class SqliteCache implements SimpleCacheInterface
 {
 
     /**
@@ -28,6 +27,19 @@ class DbMetaSqlite implements SimpleCacheInterface
      * @var SQLite3
      */
     protected $db;
+
+    /**
+     * Constructor
+     *
+     * @param string $file Database file
+     */
+    public function __construct($file)
+    {
+        if (!isset($file)) {
+            throw new Exception('Parameter file required');
+        }
+        $this->open($file);
+    }
 
     /**
      * Connect to database
@@ -170,4 +182,5 @@ class DbMetaSqlite implements SimpleCacheInterface
         $this->cache = array();
         return true;
     }
+
 }
