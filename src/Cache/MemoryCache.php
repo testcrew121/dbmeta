@@ -22,10 +22,8 @@ class MemoryCache implements SimpleCacheInterface
      */
     public function set($key, $value, $ttl = null)
     {
-        if ($key === null) {
-            throw new Exception('Argument Null Exception');
-        }
-        $this->cache[$key] = $this->createCacheValue($key, $value, $ttl);
+        $chacheKey = $this->createCacheKey($key);
+        $this->cache[$chacheKey] = $this->createCacheValue($key, $value, $ttl);
         return true;
     }
 
@@ -34,13 +32,11 @@ class MemoryCache implements SimpleCacheInterface
      */
     public function get($key, $default = null)
     {
-        if ($key === null) {
-            throw new Exception('Argument Null Exception');
-        }
-        if (!array_key_exists($key, $this->cache)) {
+        $chacheKey = $this->createCacheKey($key);
+        if (!array_key_exists($chacheKey, $this->cache)) {
             return $default;
         }
-        $cacheValue = $this->cache[$key];
+        $cacheValue = $this->cache[$chacheKey];
         if ($this->isExpired($cacheValue['expires'])) {
             $this->remove($key);
             return $default;
@@ -53,13 +49,11 @@ class MemoryCache implements SimpleCacheInterface
      */
     public function has($key)
     {
-        if ($key === null) {
-            throw new Exception('Argument Null Exception');
-        }
-        if (!array_key_exists($key, $this->cache)) {
+        $chacheKey = $this->createCacheKey($key);
+        if (!array_key_exists($chacheKey, $this->cache)) {
             return false;
         }
-        $cacheValue = $this->cache[$key];
+        $cacheValue = $this->cache[$chacheKey];
         if ($this->isExpired($cacheValue['expires'])) {
             $this->remove($key);
             return false;
@@ -72,7 +66,8 @@ class MemoryCache implements SimpleCacheInterface
      */
     public function remove($key)
     {
-        unset($this->cache[$key]);
+        $chacheKey = $this->createCacheKey($key);
+        unset($this->cache[$chacheKey]);
         return true;
     }
 
@@ -83,6 +78,21 @@ class MemoryCache implements SimpleCacheInterface
     {
         $this->cache = array();
         return true;
+    }
+
+    /**
+     * Create cache key.
+     *
+     * @param mixed $key
+     * @return string
+     * @throws Exception
+     */
+    protected function createCacheKey($key)
+    {
+        if ($key === null) {
+            throw new Exception('Argument Null Exception');
+        }
+        return serialize($key);
     }
 
     /**

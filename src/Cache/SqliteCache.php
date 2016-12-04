@@ -70,16 +70,12 @@ class SqliteCache implements SimpleCacheInterface
      */
     public function set($key, $value, $ttl = null)
     {
-        if ($key === null) {
-            throw new Exception('ArgumentNullException');
-        }
-        $cacheKey = $this->encodeJson($key);
-        $cacheValue = $this->createCacheValue($cacheKey, $value, $ttl);
-        $jsonValue = $this->encodeJson($cacheValue);
+        $cacheKey = $this->createCacheKey($key);
+        $cacheValue = $this->createCacheValue($key, $value, $ttl);
         /* @var $st SQLite3Stmt */
         $st = $this->db->prepare('INSERT OR REPLACE INTO meta VALUES(?,?)');
         $st->bindParam(1, $cacheKey, SQLITE3_TEXT);
-        $st->bindParam(2, $jsonValue, SQLITE3_TEXT);
+        $st->bindParam(2, $cacheValue, SQLITE3_TEXT);
         $result = $st->execute() !== false;
         return $result;
     }
@@ -89,13 +85,10 @@ class SqliteCache implements SimpleCacheInterface
      */
     public function get($key, $default = null)
     {
-        if ($key === null) {
-            throw new Exception('ArgumentNullException');
-        }
-        $cacheKey = $this->encodeJson($key);
+        $cacheKey = $this->createCacheKey($key);
         $st = $this->db->prepare('SELECT meta_value FROM meta WHERE meta_key=?;');
         $st->bindParam(1, $cacheKey, SQLITE3_TEXT);
-        $row = $st->execute()->fetchArray();
+        $row = $st->execute()->fetchArray(SQLITE3_ASSOC);
         if (!isset($row['meta_value'])) {
             return $default;
         }
@@ -112,10 +105,7 @@ class SqliteCache implements SimpleCacheInterface
      */
     public function has($key)
     {
-        if ($key === null) {
-            throw new Exception('Argument Null Exception');
-        }
-        $cacheKey = $this->encodeJson($key);
+        $cacheKey = $this->createCacheKey($key);
         $st = $this->db->prepare('SELECT 1,meta_value FROM meta WHERE meta_key=?;');
         $st->bindParam(1, $cacheKey, SQLITE3_TEXT);
         $row = $st->execute()->fetchArray(SQLITE3_ASSOC);
@@ -135,10 +125,7 @@ class SqliteCache implements SimpleCacheInterface
      */
     public function remove($key)
     {
-        if ($key === null) {
-            throw new Exception('Argument Null Exception');
-        }
-        $cacheKey = $this->encodeJson($key);
+        $cacheKey = $this->createCacheKey($key);
         $st = $this->db->prepare('DELETE FROM meta WHERE meta_key=?;');
         $st->bindParam(1, $cacheKey, SQLITE3_TEXT);
         $result = $st->execute() !== false;
@@ -153,7 +140,7 @@ class SqliteCache implements SimpleCacheInterface
      */
     protected function encodeJson($value)
     {
-        return json_encode($this->encodeUtf8($value), 0);
+        return serialize($value);
     }
 
     /**
@@ -164,32 +151,7 @@ class SqliteCache implements SimpleCacheInterface
      */
     protected function decodeJson($json)
     {
-        return json_decode($json, true);
-    }
-
-    /**
-     * Returns a UTF-8 encoded string or array
-     *
-     * @param mixed $mix
-     * @return mixed
-     */
-    protected function encodeUtf8($mix)
-    {
-        if ($mix === null || $mix === '') {
-            return $mix;
-        }
-        if (is_array($mix)) {
-            foreach ($mix as $key => $val) {
-                $mix[$key] = $this->encodeUtf8($val);
-            }
-            return $mix;
-        } else {
-            if (!mb_check_encoding($mix, 'UTF-8')) {
-                return mb_convert_encoding($mix, 'UTF-8');
-            } else {
-                return $mix;
-            }
-        }
+        return unserialize($json);
     }
 
     /**
@@ -203,6 +165,21 @@ class SqliteCache implements SimpleCacheInterface
     }
 
     /**
+     * Create cache key.
+     *
+     * @param mixed $key
+     * @return string
+     * @throws Exception
+     */
+    protected function createCacheKey($key)
+    {
+        if ($key === null) {
+            throw new Exception('Argument Null Exception');
+        }
+        return $this->encodeJson($key);
+    }
+
+    /**
      * Creates a FileSystemCacheValue object.
      *
      * @param mixed $key The cache key the file is stored under.
@@ -213,13 +190,14 @@ class SqliteCache implements SimpleCacheInterface
     protected function createCacheValue($key, $value, $ttl = null)
     {
         $created = time();
-        return array(
+        $data = array(
             'created' => $created,
             'key' => $key,
             'value' => $value,
             'ttl' => $ttl,
             'expires' => ($ttl) ? $created + $ttl : null
         );
+        return $this->encodeJson($data);
     }
 
     /**
