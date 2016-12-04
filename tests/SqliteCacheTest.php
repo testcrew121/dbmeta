@@ -3,10 +3,10 @@
 /**
  * SqliteCache Test
  */
-class DbMetaSqliteTest extends PHPUnit_Framework_TestCase
+class DbMetaSqliteTest extends MemoryCacheTest
 {
 
-    protected $meta;
+    protected $cache;
 
     protected function setUp()
     {
@@ -16,57 +16,13 @@ class DbMetaSqliteTest extends PHPUnit_Framework_TestCase
             mkdir($path, 0777, true);
         }
 
-        $this->meta = new \Odan\Cache\SqliteCache($file);
-        $this->meta->clear();
+        $this->cache = new \Odan\Cache\SqliteCache($file);
+        $this->cache->clear();
     }
 
     public function testInstanceOf()
     {
-        $this->assertInstanceOf(\Odan\Cache\SqliteCache::class, $this->meta);
-    }
-
-    public function testHasStringKey()
-    {
-        $this->meta->set('key', 'value');
-        $this->assertTrue($this->meta->has('key'));
-    }
-
-    public function testHasArrayKey()
-    {
-        $this->meta->set(array('table', '1'), 'value');
-        $this->assertTrue($this->meta->has(array('table', '1')));
-    }
-
-    public function testHasNotExistsStringKey()
-    {
-        $this->assertFalse($this->meta->has('somethingkey'));
-    }
-
-    public function testHasNotExistsArrayKey()
-    {
-        $this->assertFalse($this->meta->has(array('table', '10')));
-    }
-
-    public function testGetByStringKey()
-    {
-        $this->meta->set('key', 'value');
-        $this->assertEquals('value', $this->meta->get('key'));
-    }
-
-    public function testGetByArrayKey()
-    {
-        $this->meta->set(array('table', '2'), 'value');
-        $this->assertEquals('value', $this->meta->get(array('table', '2')));
-    }
-
-    public function testGetByStringKeyWithDefaultValue()
-    {
-        $this->assertEquals('default value', $this->meta->get('somenotexistingkey', 'default value'));
-    }
-
-    public function testGetByArrayKeyWithDefaultValue()
-    {
-        $this->assertEquals(array('table', '3'), $this->meta->get('somenotexistingkey', array('table', '3')));
+        $this->assertInstanceOf(\Odan\Cache\SqliteCache::class, $this->cache);
     }
 
 }
