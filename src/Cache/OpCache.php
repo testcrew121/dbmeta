@@ -16,7 +16,6 @@ use RecursiveDirectoryIterator;
  */
 class OpCache implements SimpleCacheInterface
 {
-
     /**
      * Cache path
      *
@@ -34,7 +33,7 @@ class OpCache implements SimpleCacheInterface
         if (isset($path)) {
             $this->path = $path;
         } else {
-            $this->path = sys_get_temp_dir() . '/opcache';
+            $this->path = sys_get_temp_dir().'/opcache';
         }
         if (!file_exists($this->path)) {
             mkdir($this->path, 0777, true);
@@ -61,7 +60,7 @@ class OpCache implements SimpleCacheInterface
 
         // HHVM fails at __set_state, so just use object cast for now
         $content = str_replace('stdClass::__set_state', '(object)', $content);
-        $content = '<?php return ' . $content . ';';
+        $content = '<?php return '.$content.';';
 
         file_put_contents($cacheFile, $content);
 
@@ -141,7 +140,7 @@ class OpCache implements SimpleCacheInterface
     protected function getFilename($key)
     {
         $sha1 = sha1(implode('', (array) $key));
-        $result = $this->path . '/' . substr($sha1, 0, 2) . '/' . substr($sha1, 2) . '.php';
+        $result = $this->path.'/'.substr($sha1, 0, 2).'/'.substr($sha1, 2).'.php';
         return $result;
     }
 
@@ -179,5 +178,4 @@ class OpCache implements SimpleCacheInterface
         //if it is after the expire time
         return time() > $expires;
     }
-
 }

@@ -13,7 +13,6 @@ use SQLite3;
  */
 class SqliteCache implements SimpleCacheInterface
 {
-
     /**
      * Filename
      *
@@ -214,5 +213,4 @@ class SqliteCache implements SimpleCacheInterface
         //if it is after the expire time
         return time() > $expires;
     }
-
 }

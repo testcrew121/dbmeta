@@ -5,7 +5,6 @@
  */
 class OpCacheTest extends MemoryCacheTest
 {
-
     protected $cache;
 
     protected function setUp()
@@ -21,5 +20,4 @@ class OpCacheTest extends MemoryCacheTest
     {
         $this->assertInstanceOf(\Odan\Cache\OpCache::class, $this->cache);
     }
-
 }

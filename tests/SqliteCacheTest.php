@@ -5,7 +5,6 @@
  */
 class DbMetaSqliteTest extends MemoryCacheTest
 {
-
     protected $cache;
 
     protected function setUp()
@@ -24,5 +23,4 @@ class DbMetaSqliteTest extends MemoryCacheTest
     {
         $this->assertInstanceOf(\Odan\Cache\SqliteCache::class, $this->cache);
     }
-
 }

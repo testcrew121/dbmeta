@@ -7,6 +7,7 @@ namespace Odan\Cache;
  */
 interface SimpleCacheInterface
 {
+
     /**
      * Set key to hold the value. If key already holds a value,
      * it is overwritten, regardless of its type.

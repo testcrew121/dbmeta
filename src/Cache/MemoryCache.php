@@ -9,7 +9,6 @@ use Exception;
  */
 class MemoryCache implements SimpleCacheInterface
 {
-
     /**
      * Memory cache data
      *
@@ -129,5 +128,4 @@ class MemoryCache implements SimpleCacheInterface
         //if it is after the expire time
         return time() > $expires;
     }
-
 }

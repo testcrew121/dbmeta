@@ -5,7 +5,6 @@
  */
 class MemoryCacheTest extends PHPUnit_Framework_TestCase
 {
-
     protected $cache;
 
     protected function setUp()
@@ -87,5 +86,4 @@ class MemoryCacheTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(array('table', '3'), $this->cache->get('somenotexistingkey', array('table', '3')));
     }
-
 }
