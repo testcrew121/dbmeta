@@ -11,7 +11,15 @@ Simple and easy key/value interface for OpCache, SQLite3 and Memory.
 ## Example
 
 ```php
-$meta = new \Odan\Cache\SqliteCache(__DIR__ . '/meta.db');
+
+// PHP OpCache
+$meta = new \Odan\Cache\OpCache();
+
+// Memory cache
+// $meta = new \Odan\Cache\MemoryCache()
+
+// SQLite cache
+// $meta = new \Odan\Cache\SqliteCache(__DIR__ . '/meta.db');
 
 // Set value
 $meta->set('key', 'value' . date('U'));
