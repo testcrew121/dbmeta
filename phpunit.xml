@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
-         bootstrap="vendor/autoload.php"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false">
+<phpunit bootstrap="vendor/autoload.php" colors="true" backupGlobals="false" 
+         backupStaticAttributes="false" syntaxCheck="false">
     <testsuites>
-        <testsuite name="Application Test Suite">
-            <directory suffix="Test.php">./tests</directory>
+        <testsuite name="Tests">
+            <directory suffix="Test.php">tests</directory>
         </testsuite>
     </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src</directory>
+            <exclude>
+                <directory>build</directory>
+                <directory>docs</directory>
+                <directory>tmp</directory>
+                <directory>vendor</directory>
+                <directory>public</directory>
+            </exclude>
+        </whitelist>
+    </filter>
 </phpunit>
