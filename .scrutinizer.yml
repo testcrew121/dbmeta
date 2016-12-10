@@ -3,7 +3,6 @@ checks:
         code_rating: true
         duplication: true
 tools:
-    external_code_coverage: true
     php_cs_fixer:
         enabled: true
         extensions:
@@ -22,14 +21,11 @@ tools:
         filter:
             paths:
                 - src/
-                - web/
-
 filter:
     paths:
         - src/*
     excluded_paths:
         - tests/
-        - src/Migration/
 build:
     environment:
         php:
