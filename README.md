@@ -1,6 +1,15 @@
 # DdMeta
 Simple and easy key/value interface for OpCache, SQLite3 and Memory.
 
+[![Latest Version](https://img.shields.io/github/release/odan/dbmeta.svg?style=flat-square)](https://github.com/loadsys/odan/dbmeta/releases)
+[![Build Status](https://travis-ci.org/odan/dbmeta.svg?branch=master&style=flat-square)](https://travis-ci.org/odan/dbmeta)
+[![Crutinizer](https://img.shields.io/scrutinizer/g/odan/dbmeta.svg?style=flat-square)](https://scrutinizer-ci.com/g/odan/dbmeta)
+[![codecov](https://codecov.io/gh/odan/dbmeta/branch/master/graph/badge.svg?style=flat-square)](https://codecov.io/gh/odan/dbmeta)
+[![Total Downloads](https://img.shields.io/packagist/dt/odan/dbmeta.svg?style=flat-square)](https://packagist.org/packages/odan/micro-app)
+[![Repo Size](https://reposs.herokuapp.com/?path=odan/dbmeta&style=flat-square)](https://reposs.herokuapp.com/?path=odan/dbmeta)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+
+
 ## Requirements
 * PHP >= 5.6
 
