@@ -1,14 +1,14 @@
 # DdMeta
-Simple and easy key/value interface for SQLite3, OpCache and Memory.
+Simple and easy key/value interface for OpCache, SQLite3 and Memory.
 
 ## Requirements
 * PHP >= 5.6
 
 ## Optional requirements
 * SQLite3 extension (php_sqlite3)
-* Write permission for cache and database files
+* Write permission for OpCache and database files
 
-## Examples
+## Example
 
 ```php
 $meta = new \Odan\Cache\SqliteCache(__DIR__ . '/meta.db');
@@ -50,3 +50,13 @@ Class: Odan\Cache\SqliteCache
 Seconds: 52.093000173569
 ```
 (lower is better)
+
+## Setup
+
+```
+composer require odan/dbmeta
+```
+
+## License
+
+MIT
