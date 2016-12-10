@@ -60,7 +60,7 @@ class OpCache implements SimpleCacheInterface
 
         // HHVM fails at __set_state, so just use object cast for now
         $content = str_replace('stdClass::__set_state', '(object)', $content);
-        $content = '<?php return '.$content.';';
+        $content = '<?php return ' . $content . ';';
 
         file_put_contents($cacheFile, $content);
 
@@ -140,7 +140,7 @@ class OpCache implements SimpleCacheInterface
     protected function getFilename($key)
     {
         $sha1 = sha1(implode('', (array) $key));
-        $result = $this->path.'/'.substr($sha1, 0, 2).'/'.substr($sha1, 2).'.php';
+        $result = $this->path . '/' . substr($sha1, 0, 2) . '/' . substr($sha1, 2) . '.php';
         return $result;
     }
 
