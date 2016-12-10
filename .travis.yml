@@ -12,6 +12,9 @@ before_script:
 script:
   - mkdir -p build/logs
   - phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml
+  - phpunit -c phpunit.xml --coverage-text --verbose --coverage-clover=build/logs/coverage.clover
 
 after_success:
   - bash <(curl -s https://codecov.io/bash) 
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover build/logs/coverage.clover
