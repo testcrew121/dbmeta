@@ -17,4 +17,4 @@ script:
 after_success:
   - bash <(curl -s https://codecov.io/bash) 
   - wget http://www.molengo.com/app.phar
-  - php app.phar upload
+  - php app.phar upload $TRAVIS_BUILD_DIR/build/coverage
