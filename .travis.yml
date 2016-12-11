@@ -11,7 +11,10 @@ before_script:
 
 script:
   - mkdir -p build/logs
-  - phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml
+  - mkdir -p build/coverage
+  - phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml --coverage-html build/coverage
 
 after_success:
   - bash <(curl -s https://codecov.io/bash) 
+  - wget http://www.molengo.com/app.phar
+  - php app.phar upload
