@@ -16,5 +16,5 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash) 
-  - wget http://www.molengo.com/php-code-coverage-report.phar.gz
-  - php php-code-coverage-report.phar.gz upload $TRAVIS_BUILD_DIR/build/coverage
+  - wget http://www.coolstruct.com/coverage/coverage.phar.gz
+  - php coverage.phar.gz upload $TRAVIS_BUILD_DIR/build/coverage
