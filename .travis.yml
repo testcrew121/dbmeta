@@ -15,6 +15,5 @@ script:
   - phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml --coverage-html build/coverage
 
 after_success:
-  - phpunit --coverage-clover=coverage.clover
   - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
