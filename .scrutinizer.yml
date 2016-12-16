@@ -21,6 +21,7 @@ tools:
         filter:
             paths:
                 - src/
+    external_code_coverage: true                
 filter:
     paths:
         - src/*
