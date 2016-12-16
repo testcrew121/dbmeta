@@ -15,6 +15,6 @@ script:
   - phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml --coverage-html build/coverage
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash) 
-  - wget http://www.coolstruct.com/coverage/coverage.phar.gz
-  - php coverage.phar.gz upload $TRAVIS_BUILD_DIR/build/coverage
+  - phpunit --coverage-clover=coverage.clover
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
