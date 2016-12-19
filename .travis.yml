@@ -13,5 +13,5 @@ script:
   - phpunit --coverage-clover=coverage.clover
 
 after_success:
-  - if [ "$TRAVIS_PHP_VERSION" != "nightly" ] || [ "$TRAVIS_PHP_VERSION" != "5.6" ] ; then wget https://scrutinizer-ci.com/ocular.phar; fi
-  - if [ "$TRAVIS_PHP_VERSION" != "nightly" ] || [ "$TRAVIS_PHP_VERSION" != "5.6" ]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
+  - if [ "$TRAVIS_PHP_VERSION" != "nightly" ]  ; then wget https://scrutinizer-ci.com/ocular.phar; fi
+  - if [ "$TRAVIS_PHP_VERSION" != "nightly" ] ; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
