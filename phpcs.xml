@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<ruleset name="Custom Standard" namespace="MyProject\CS\Standard">
+  <rule ref="PEAR"/>
+</ruleset>
